@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<vector<int>> directions{{1,0}, {0,1}, {-1,0}, {0,-1}};
+    bool findword(vector<vector<char>>& board, string word, int i, int r, int c, vector<vector<bool>> &visited) {
+        if(i == word.size()) return true;
+        if(board[r][c] != word[i]) return false;
+        visited[r][c] = true;
+        if(i == word.size()-1) return true;
+        for(auto d: directions) {
+            int nr = r+d[0];
+            int nc = c+d[1];
+            if(nr >= 0 && nr < board.size() && nc >= 0 && nc < board[0].size() && !visited[nr][nc]) {
+                if(findword(board, word, i+1, r+d[0], c+d[1], visited)) return true;
+            }
+        }
+        visited[r][c] = false;
+        return false;
+    }
+    bool exist(vector<vector<char>>& board, string word) {
+        vector<vector<bool>> visited(board.size(), vector<bool>(board[0].size(), false));
+        for(int i=0; i<board.size(); i++) {
+            for(int j=0; j<board[0].size(); j++){
+                if(findword(board, word, 0, i, j, visited)) return true;
+            }
+        }
+        return false;
+    }
+};
